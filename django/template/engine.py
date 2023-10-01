@@ -8,6 +8,8 @@ from .base import Template
 from .context import Context, _builtin_context_processors
 from .exceptions import TemplateDoesNotExist
 from .library import import_library
+from django.template import engines
+from django.template.backends.django import DjangoTemplates
 
 
 class Engine:
@@ -91,8 +93,7 @@ class Engine:
         # Since Engine is imported in django.template and since
         # DjangoTemplates is a wrapper around this Engine class,
         # local imports are required to avoid import loops.
-        from django.template import engines
-        from django.template.backends.django import DjangoTemplates
+     
         for engine in engines.all():
             if isinstance(engine, DjangoTemplates):
                 return engine.engine
@@ -182,6 +183,8 @@ class Engine:
         else:
             return t.render(Context(context, autoescape=self.autoescape))
 
+
+    
     def select_template(self, template_name_list):
         """
         Given a list of template names, return the first that can be loaded.
